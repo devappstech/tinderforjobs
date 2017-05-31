@@ -11,12 +11,6 @@ const Interest = (sequelize, Sequelize) =>{
             type: Sequelize.STRING,
             allowNull: false
         }
-    },{
-        classMethods:{
-            associate: function(model){
-                interest.belongsTo(model.user);
-            }
-        }
     });
     return interest;
 }

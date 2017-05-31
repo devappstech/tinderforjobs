@@ -41,12 +41,6 @@ const User = (sequelize, Sequelize) =>{
                 return bcrypt.compareSync(password, this.password);
             },
         }
-    },{
-        classMethods:{
-            associate: function(models){
-                user.hasMany(models.interest);
-            }
-        }
     });
     return usr;
 }

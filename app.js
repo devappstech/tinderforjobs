@@ -40,8 +40,8 @@ app.listen(port, ()=>{
 });
 
 var models = require('./models');
-models.sequelize.sync({force:true}).then(function(){
+models.sequelize.sync().then(function(){
     console.log("database synced");
 }).catch(function(err){
-    console.log("oops");
+    console.log("oops " + err);
 });

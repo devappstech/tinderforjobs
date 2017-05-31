@@ -1,0 +1,35 @@
+Database model
+
++--------------------+
+|        user        |
++--------------------+                                     +----------------+
+| + username/oauth   |                                     |    interest    |
+| + password         |                                     +----------------+
+| + interests:[...]  | --> array of interest_ids           | + id           |
+| + matches: [...]   | --> array of user_ids               | + name         |
+| + location: point  |                                     +----------------+
+| + search_distance  |                                             \|/
++--------------------+                                              |
+         \|/                   +---------------------+              |
+          |                    |    user_interest    |              |
+          +------------------- +---------------------+ -------------+
+                               | + interestid        |
+                               | + userid            |
+                               +---------------------+
+
+Utilities:
+getProfiles(...)
+--> if(this.user.isEmployer)
+    --> get useres where isEmpoyer == 0
+    recursively call method to get a list of users, maximum 10 users.
+    if the call returns null 3 times, exit the recursive strategy.
+    --> getProfile : user
+        --> select based on: interestid matching this.user,
+                             and if users location is within their search distance.
+                             ie (where location +-search distance...).
+
+
+TODO: Make a bridging table model.
+      and make the relationship between them.
+TODO: - Develop the API for the users to recieve other user profile information
+      - User utilities 

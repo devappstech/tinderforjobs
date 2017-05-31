@@ -44,28 +44,37 @@ router.get('/find/:usr', (req, res, next) =>{
 router.post('/auth', (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
+    console.log(username);
     models.user.findById(username)
         .then(user => {
             // authenticate
-            if(user.validatePassword(password)){
-                // grab the relevant data from the model.
-                var u = {
-                    username: user.username,
-                    password: user.password,
-                    isEmployer: user.isEmployer,
-                };
-                const token = jwt.sign(u,config.secret, {expiresIn: 604800});
-                res.json({
-                    success:true,
-                    token: 'JWT ' + token,
-                    user: u
-                });
+            if(user != null){
+                if(user.validatePassword(password)){
+                    // grab the relevant data from the model.
+                    var u = {
+                        username: user.username,
+                        password: user.password,
+                        isEmployer: user.isEmployer,
+                    };
+                    const token = jwt.sign(u,config.secret, {expiresIn: 604800});
+                    res.json({
+                        success:true,
+                        token: 'JWT ' + token,
+                        user: u
+                    });
+                }else{
+                    res.json({
+                        success:false,
+                        msg: "incorrect password"
+                    });
+                }
             }else{
                 res.json({
                     success:false,
-                    msg: "incorrect password"
-                });
+                    msg:"user does not exist"
+                })
             }
+
         })
         .catch(err => {
             // throw error message.
@@ -79,5 +88,9 @@ router.post('/auth', (req, res, next) => {
 router.get('/profile', passport.authenticate('jwt',{session:false}), (req, res, next) => {
     res.json({user: req.user});
 });
+
+router.post('/test', (req, res, next)=>{
+    const interest = req.body.interest;
+})
 
 module.exports = router;
