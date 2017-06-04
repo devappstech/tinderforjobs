@@ -29,7 +29,9 @@ Object.keys(db).forEach(function(modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.user.hasMany(db.user_interest);
-db.interest.hasMany(db.user_interest);
+// db.user.hasMany(db.user_interest, {as:"userinterests"});
+// db.interest.hasMany(db.user_interest,{as:"userinterests"});
+db.user.belongsToMany(db.interest, {through:'uis'});
+db.interest.belongsToMany(db.user, {through:'uis'});
 
 module.exports = db;

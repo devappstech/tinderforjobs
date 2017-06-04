@@ -89,8 +89,19 @@ router.get('/profile', passport.authenticate('jwt',{session:false}), (req, res, 
     res.json({user: req.user});
 });
 
-router.post('/test', (req, res, next)=>{
+// adds an interest to the authenticated user.
+router.post('/add_interest', passport.authenticate('jwt', {session:false}), (req, res, next)=>{
+    const user = req.user;
     const interest = req.body.interest;
-})
+    const im = models.interest;
+    let interest_id;
+    // find the interest in the interests table, if it does not exist create it.
+    im.findOrCreate({where: {name : interest}})
+    .spread((interest, created)=>{
+        //interest_id = interest[0].id;
+        user.addInterest(interest);
+        res.json(({user: user}));
+    });
+});
 
 module.exports = router;
